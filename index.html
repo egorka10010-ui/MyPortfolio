@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SClaude — Сайты, Боты, Mini App</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0a0b;--panel:#18181a;--gold:#C5A059;--champ:#E5D3B3;--dgold:#8a6d2f;--text:#f2efe8;}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif;
+    padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
+  .font-display{font-family:'Plus Jakarta Sans','Space Grotesk',sans-serif;font-weight:800}
+
+  /* 3D-заголовки: жёсткие многослойные золотисто-бронзовые тени */
+  .text-3d{
+    color:#f6ecd6;
+    text-shadow:1px 1px 0 #b8975a,2px 2px 0 #b8975a,3px 3px 0 #8a6d2f,4px 4px 0 #8a6d2f,
+      5px 5px 0 #4d3b14,6px 6px 0 #4d3b14,7px 7px 0 #1c1508,8px 8px 0 #1c1508,9px 9px 14px rgba(0,0,0,.85);
+  }
+  .text-3d-grad{
+    background:linear-gradient(90deg,#E5D3B3,#C5A059 55%,#D4AF37);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(1px 1px 0 #6b5322) drop-shadow(2px 2px 0 #6b5322) drop-shadow(3px 3px 0 #2e2410)
+      drop-shadow(4px 4px 0 #2e2410) drop-shadow(6px 8px 10px rgba(0,0,0,.85));
+  }
+
+  /* Объёмные кнопки: вдавливаются, на золотых — мягкое мерцание */
+  .btn-3d{
+    position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:.6rem;font-weight:700;font-size:1.05rem;
+    padding:1rem 1.75rem;border:3px solid #000;border-radius:1rem;color:#14110a;
+    box-shadow:0 7px 0 #000,inset 0 3px 0 rgba(255,255,255,.4),inset 0 -5px 8px rgba(0,0,0,.25);
+    transition:transform .2s ease,box-shadow .2s ease;cursor:pointer;text-decoration:none;
+  }
+  .btn-gold{background:linear-gradient(180deg,#e7d6ad,#C5A059 60%,#9d7d3a)}
+  .btn-champ{background:linear-gradient(180deg,#f3e9d2,#E5D3B3 60%,#bfa97f)}
+  .btn-3d::before,.thumb::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%);
+    transform:translateX(-120%);transition:transform .7s ease}
+  .btn-3d:hover::before,.card-3d:hover .thumb::before{transform:translateX(120%)}
+  .btn-3d:hover{transform:translateY(3px);box-shadow:0 4px 0 #000,inset 0 3px 0 rgba(255,255,255,.4),inset 0 -5px 8px rgba(0,0,0,.25)}
+  .btn-3d:active{transform:translateY(6px);box-shadow:0 1px 0 #000,inset 0 6px 12px rgba(0,0,0,.4)}
+
+  /* Объёмные карточки */
+  .card-3d{
+    background:linear-gradient(160deg,#222224,var(--panel));border:3px solid #000;border-radius:1.5rem;
+    box-shadow:10px 10px 0 #000,inset 0 2px 0 rgba(255,255,255,.07),inset 0 -8px 16px rgba(0,0,0,.4);
+    transition:transform .25s ease,box-shadow .25s ease;
+  }
+  .card-3d:hover{transform:translate(5px,5px);box-shadow:5px 5px 0 #000,inset 0 2px 0 rgba(255,255,255,.07),inset 0 -8px 16px rgba(0,0,0,.4)}
+  /* Заглушка: от тёмного золота к металлическому серому */
+  .thumb{
+    position:relative;overflow:hidden;border:3px solid #000;border-radius:1rem;aspect-ratio:16/10;display:grid;place-items:center;color:#17120a;
+    background:linear-gradient(135deg,#a98a45 0%,#7d6a40 45%,#5b5b60 100%);
+    box-shadow:inset 0 8px 18px rgba(255,240,200,.3),inset 0 -14px 26px rgba(0,0,0,.5),inset 8px 0 20px rgba(0,0,0,.15);
+  }
+  .thumb svg{width:4.5rem;height:4.5rem;stroke-width:2.4;filter:drop-shadow(3px 4px 0 rgba(0,0,0,.45))}
+  .logo{background:linear-gradient(180deg,#e7d6ad,#C5A059);color:#14110a;border:3px solid #000;border-radius:.8rem;
+    box-shadow:0 4px 0 #000,inset 0 2px 0 rgba(255,255,255,.45);padding:.3rem .8rem}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body class="antialiased">
+
+<!-- Шапка -->
+<header class="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-black/50 border-b-4 border-black" style="padding-top:env(safe-area-inset-top,0px)">
+  <div class="max-w-6xl mx-auto px-5 py-3 flex items-center justify-between">
+    <a href="#top" class="logo font-display text-xl tracking-tight">SClaude</a>
+    <nav class="hidden sm:flex gap-6 font-bold">
+      <a href="#works" class="hover:text-[var(--gold)] transition-colors">Работы</a>
+      <a href="#contacts" class="hover:text-[var(--champ)] transition-colors">Контакты</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- Главный экран -->
+  <section class="max-w-6xl mx-auto px-5 pt-36 pb-24 text-center">
+    <p class="inline-block mb-6 px-4 py-1.5 rounded-full border-[3px] border-black bg-[#17191b] font-bold text-[var(--champ)] shadow-[0_4px_0_#000]">@sunwale</p>
+    <h1 class="font-display font-black text-6xl sm:text-8xl lg:text-9xl leading-[0.95] tracking-tight text-3d">SClaude</h1>
+    <h2 class="font-display font-black text-3xl sm:text-5xl lg:text-6xl mt-6 text-3d-grad">Сайты · Боты · Mini App</h2>
+    <p class="mt-10 max-w-xl mx-auto text-lg text-zinc-300">Делаю лендинги, Telegram-боты и мини-приложения под ключ — быстро, чисто и с характером.</p>
+    <div class="mt-12 flex flex-wrap justify-center gap-6">
+      <a href="#works" class="btn-3d btn-gold"><i data-lucide="layers"></i>Смотреть работы</a>
+      <a href="#contacts" class="btn-3d btn-champ"><i data-lucide="send"></i>Связаться</a>
+    </div>
+  </section>
+
+  <!-- Мои работы -->
+  <section id="works" class="max-w-6xl mx-auto px-5 py-20">
+    <h2 class="font-display font-black text-5xl sm:text-7xl mb-14 text-3d">Мои работы</h2>
+    <div class="grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-6">
+
+      <article class="card-3d p-5 flex flex-col relative lg:col-span-2">
+        <!-- Вся карточка кликабельна -->
+        <a href="https://t.me/BluePlanetsBot" target="_blank" rel="noopener" class="absolute inset-0 z-10 rounded-[1.5rem]" aria-label="Бот в Telegram по покупке звезд"></a>
+        <div class="thumb"><i data-lucide="star"></i></div>
+        <h3 class="font-display font-black text-2xl mt-6 text-[var(--gold)]">Бот в Telegram по покупке звезд</h3>
+        <p class="mt-2 text-zinc-300 flex-1">Современный автоматизированный магазин звёзд Telegram и Premium 24/7 с удобным интерфейсом.</p>
+        <a href="https://t.me/BluePlanetsBot" target="_blank" rel="noopener" class="btn-3d btn-gold mt-6 justify-center relative z-20"><i data-lucide="external-link"></i>Открыть проект</a>
+      </article>
+
+      <article class="card-3d p-5 flex flex-col relative lg:col-span-2">
+        <!-- Вся карточка кликабельна -->
+        <a href="https://green-bean-tawny.vercel.app/" target="_blank" rel="noopener" class="absolute inset-0 z-10 rounded-[1.5rem]" aria-label="Green Bean — Лендинг для кофейни"></a>
+        <div class="thumb"><i data-lucide="coffee"></i></div>
+        <h3 class="font-display font-black text-2xl mt-6 text-[var(--champ)]">Green Bean — Лендинг для кофейни</h3>
+        <p class="mt-2 text-zinc-300 flex-1">Стильный и адаптивный одностраничный сайт для кофейни с собственной обжаркой. Меню, отзывы и форма заказа.</p>
+        <a href="https://green-bean-tawny.vercel.app/" target="_blank" rel="noopener" class="btn-3d btn-champ mt-6 justify-center relative z-20"><i data-lucide="external-link"></i>Открыть проект</a>
+      </article>
+
+      <article class="card-3d p-5 flex flex-col relative lg:col-span-2">
+        <!-- Вся карточка кликабельна -->
+        <a href="https://t.me/SClaudeeBot" target="_blank" rel="noopener" class="absolute inset-0 z-10 rounded-[1.5rem]" aria-label="Мой Telegram бот с Mini App"></a>
+        <div class="thumb"><i data-lucide="smartphone"></i></div>
+        <h3 class="font-display font-black text-2xl mt-6 text-[var(--gold)]">Мой Telegram бот с Mini App</h3>
+        <p class="mt-2 text-zinc-300 flex-1">Инновационный Telegram-бот со встроенным интерактивным веб-приложением (Mini App) для расширенного функционала.</p>
+        <a href="https://t.me/SClaudeeBot" target="_blank" rel="noopener" class="btn-3d btn-gold mt-6 justify-center relative z-20"><i data-lucide="external-link"></i>Открыть проект</a>
+      </article>
+
+      <article class="card-3d p-5 flex flex-col relative lg:col-span-2 lg:col-start-2">
+        <!-- Вся карточка кликабельна -->
+        <a href="https://sclaude.egorka10010.workers.dev" target="_blank" rel="noopener" class="absolute inset-0 z-10 rounded-[1.5rem]" aria-label="Сайт для заказа услуги"></a>
+        <div class="thumb"><i data-lucide="globe"></i></div>
+        <h3 class="font-display font-black text-2xl mt-6 text-[var(--champ)]">Сайт для заказа услуги</h3>
+        <p class="mt-2 text-zinc-300 flex-1">Полноценный брутальный лендинг по разработке сайтов, ботов и ИИ-инструментов через вайбкодинг.</p>
+        <a href="https://sclaude.egorka10010.workers.dev" target="_blank" rel="noopener" class="btn-3d btn-champ mt-6 justify-center relative z-20"><i data-lucide="external-link"></i>Открыть проект</a>
+      </article>
+
+      <article class="card-3d p-5 flex flex-col relative md:col-span-2 md:max-w-md md:mx-auto md:w-full lg:max-w-none lg:mx-0 lg:col-span-2">
+        <!-- Вся карточка кликабельна -->
+        <a href="https://egorka10010-ui.github.io/CalibreCO/" target="_blank" rel="noopener" class="absolute inset-0 z-10 rounded-[1.5rem]" aria-label="Calibre & Co."></a>
+        <div class="thumb"><i data-lucide="watch"></i></div>
+        <h3 class="font-display font-black text-2xl mt-6 text-[var(--gold)]">Calibre &amp; Co.</h3>
+        <p class="mt-2 text-zinc-300 flex-1">Концепт премиального интернет-магазина механических часов в минималистичном стиле «тихого люкса».</p>
+        <a href="https://egorka10010-ui.github.io/CalibreCO/" target="_blank" rel="noopener" class="btn-3d btn-gold mt-6 justify-center relative z-20"><i data-lucide="external-link"></i>Открыть проект</a>
+      </article>
+
+    </div>
+  </section>
+</main>
+
+<!-- Футер / контакты -->
+<footer id="contacts" class="max-w-6xl mx-auto px-5 pt-20 pb-16 text-center">
+  <div class="card-3d px-6 py-16">
+    <h2 class="font-display font-black text-4xl sm:text-6xl lg:text-7xl leading-tight text-3d">Есть идея?</h2>
+    <h3 class="font-display font-black text-3xl sm:text-5xl mt-3 text-3d-grad">Давай сделаем это.</h3>
+    <div class="mt-12 flex flex-wrap justify-center gap-6">
+      <a href="https://t.me/sunwale" target="_blank" rel="noopener" class="btn-3d btn-gold social" aria-label="Telegram"><i data-lucide="send"></i></a>
+      <!-- TODO: впиши свою почту -->
+      <a href="mailto:you@example.com" class="btn-3d btn-champ social" aria-label="Email"><i data-lucide="mail"></i></a>
+    </div>
+    <a href="https://t.me/sunwale" target="_blank" rel="noopener" class="btn-3d btn-champ mt-12"><i data-lucide="message-circle"></i>Написать в Telegram</a>
+  </div>
+  <p class="mt-10 text-zinc-500 font-bold">© <span id="y"></span> SClaude · @sunwale</p>
+</footer>
+
+<script>
+  lucide.createIcons();
+  document.getElementById('y').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
